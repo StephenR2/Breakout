@@ -2,6 +2,11 @@ import pygame
 class Brick(pygame.sprite.Sprite):
 
     def __init__(self, width, color):
+        """
+        Sets constants of the brick
+        :param width: Gets width of brick
+        :param color: Gets color of brick
+        """
         super().__init__()
 
 

@@ -1,5 +1,4 @@
 import ball
-import time
 import brick
 import paddle
 import pygame
@@ -12,6 +11,8 @@ def main():
     pygame.font.init()
 
     #  Constants that will be used in the program
+    FPS = 60
+    fpsClock = pygame.time.Clock()
     APPLICATION_WIDTH = 400
     APPLICATION_HEIGHT = 600
     PADDLE_Y_OFFSET = 30
@@ -61,6 +62,7 @@ def main():
     paddleGroup.add(paddletest)
 
     while True:
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -77,6 +79,8 @@ def main():
             pygame.time.wait(100)
             NUM_TURNS = NUM_TURNS - 1
         if NUM_TURNS == 0:
+            pygame.mixer.music.load("Heartbeat.mp3")
+            pygame.mixer.music.play()
             mainSurface.fill(BLACK)
             myfont = pygame.font.SysFont('Helvetica', 30)
             textsurface = myfont.render('Game Over!', False, RED)
@@ -84,14 +88,29 @@ def main():
             YTEXT = (APPLICATION_HEIGHT / 2) - 60
             mainSurface.blit(textsurface, (XTEXT, YTEXT))
             pygame.display.update()
-            pygame.time.wait(1050)
+            pygame.time.wait(3000)
             sys.exit()
             pygame.quit()
+        bricksprites = brickGroup.sprites()
+        if len(bricksprites) == 0:
+            pygame.mixer.music.load("Cheering.mp3")
+            pygame.mixer.music.play()
+            myfontwin = pygame.font.SysFont('Helvetica', 30)
+            textsurfacewin = myfontwin.render('You Win!', False, GREEN)
+            XTEXT = (APPLICATION_WIDTH / 2) - 60
+            YTEXT = (APPLICATION_HEIGHT / 2) - 60
+            mainSurface.blit(textsurfacewin, (XTEXT, YTEXT))
+            pygame.display.update()
+            pygame.time.wait(1500)
+            sys.exit()
+            pygame.quit()
+
         drawBall.collide_brick(brickGroup)
-        drawBall.collide_paddle(paddleGroup)
+        drawBall.collide_paddle(paddleGroup, paddletest.rect)
 
         for bricks in brickGroup:
             mainSurface.blit(bricks.image, bricks.rect)
         pygame.display.update()
+        fpsClock.tick(FPS)
 
 main()
